@@ -8,7 +8,7 @@ public class Board {
     final private Square[][] board;
     private Integer heuristicCost;
 
-    public Board(int n) {
+    public Board(final int n) {
         board = new Square[n][n];
         for (int j = 0; j < board[0].length; j++) {
             board[0][j] = new Queen(0, j);
@@ -21,7 +21,7 @@ public class Board {
         BoardUtils.shuffle(board);
     }
 
-    public Board(Square[][] board) {
+    public Board(final Square[][] board) {
         this.board = BoardUtils.copyBoard(board);
     }
 
@@ -53,7 +53,7 @@ public class Board {
         return attackingPairs.size();
     }
 
-    private void checkLeft(Queen queen, Set<Pair> attackingPairs) {
+    private void checkLeft(final Queen queen, final Set<Pair> attackingPairs) {
         for (int j = queen.y() - 1; j >= 0; j--) {
             if (board[queen.x()][j] instanceof Queen) {
                 attackingPairs.add(new Pair(queen, (Queen) board[queen.x()][j]));
@@ -61,7 +61,7 @@ public class Board {
         }
     }
 
-    private void checkRight(Queen queen, Set<Pair> attackingPairs) {
+    private void checkRight(final Queen queen, final Set<Pair> attackingPairs) {
         for (int j = queen.y() + 1; j < board[0].length; j++) {
             if (board[queen.x()][j] instanceof Queen) {
                 attackingPairs.add(new Pair(queen, (Queen) board[queen.x()][j]));
@@ -69,7 +69,7 @@ public class Board {
         }
     }
 
-    private void checkUpRight(Queen queen, Set<Pair> attackingPairs) {
+    private void checkUpRight(final Queen queen, final Set<Pair> attackingPairs) {
         int i = queen.x() - 1;
         int j = queen.y() + 1;
         while (i >= 0 && j < board.length) {
@@ -81,7 +81,7 @@ public class Board {
         }
     }
 
-    private void checkUpLeft(Queen queen, Set<Pair> attackingPairs) {
+    private void checkUpLeft(final Queen queen, final Set<Pair> attackingPairs) {
         int i = queen.x() - 1;
         int j = queen.y() - 1;
         while (i >= 0 && j >= 0) {
@@ -93,7 +93,7 @@ public class Board {
         }
     }
 
-    private void checkDownRight(Queen queen, Set<Pair> attackingPairs) {
+    private void checkDownRight(final Queen queen, final Set<Pair> attackingPairs) {
         int i = queen.x() + 1;
         int j = queen.y() + 1;
         while (i < board.length && j < board.length) {
@@ -105,7 +105,7 @@ public class Board {
         }
     }
 
-    private void checkDownLeft(Queen queen, Set<Pair> attackingPairs) {
+    private void checkDownLeft(final Queen queen, final Set<Pair> attackingPairs) {
         int i = queen.x() + 1;
         int j = queen.y() - 1;
         while (i < board.length && j >= 0) {
@@ -128,7 +128,6 @@ public class Board {
                 }
             }
         }
-        return toString.toString() +
-                getHeuristicCost();
+        return toString.toString();
     }
 }

@@ -1,7 +1,7 @@
 /**
   * Victor Kwak
   */
-abstract class Square (var x: Int, var y: Int, val symbol: String){
+sealed abstract class Square (var x: Int, var y: Int, val symbol: String){
 
   def setXY(x: Int, y: Int) {
     this.x = x
@@ -19,3 +19,9 @@ abstract class Square (var x: Int, var y: Int, val symbol: String){
 
   override def toString = String.valueOf(symbol)
 }
+
+class Empty(x: Int, y: Int)
+  extends Square(x, y, " - ")
+
+class Queen(x: Int, y: Int)
+  extends Square(x, y, " Q ")

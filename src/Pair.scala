@@ -1,7 +1,7 @@
 /**
   * Created by Victor Kwak on 2/21/16.
   */
-class Pair (val one: Queen, val two: Queen){
+class Pair (private val one: Queen, private val two: Queen){
 
   override def equals(o: Any): Boolean = {
     if (!o.isInstanceOf[Pair]) {
@@ -12,9 +12,9 @@ class Pair (val one: Queen, val two: Queen){
       one == pairToCompare.two && two == pairToCompare.one
   }
 
-  override def hashCode: Int =
+  override def hashCode =
     (one.x * 17 + one.y) + (two.x * 17 + two.y)
 
-  override def toString: String =
+  override def toString =
     "{" + one.x + ", " + one.y + "}" + "{" + two.x + ", " + two.y + "}"
 }
