@@ -1,7 +1,7 @@
 /**
   * Victor Kwak
   */
-class Square (var x: Int, var y: Int, val symbol: String){
+abstract class Square (var x: Int, var y: Int, val symbol: String){
 
   def setXY(x: Int, y: Int) {
     this.x = x
