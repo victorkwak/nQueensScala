@@ -1,5 +1,3 @@
-import java.util.Random
-
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -23,7 +21,7 @@ object BoardUtils {
     }
     for (i <- 0 to board.length) {
       swap(board, i, queen.y, i + 1, queen.y)
-      if (i + 1 != queen.x){
+      if (i + 1 != queen.x) {
         children += new Board(board)
       }
     }
