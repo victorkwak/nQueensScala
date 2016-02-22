@@ -3,6 +3,7 @@ import com.sun.tools.corba.se.idl.SequenceEntry
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * Created by cary on 2/21/16.
@@ -13,8 +14,8 @@ object BoardUtils {
     val rand : Random = scala.util.Random
 
     for (i <- 0 to toShuffle(0).length) {
-      var rand1 : Int = rand.nextInt(toShuffle.length)
-      // TODO: swap(toShuffle, 0, j, rand, j);
+      val rand1 : Int = rand.nextInt(toShuffle.length)
+      swap(toShuffle, 0, i, rand1, i)
     }
   }
 
@@ -51,12 +52,28 @@ object BoardUtils {
   def generateChildren(current: Board) : ArrayBuffer[Board] = {
     var children = new ArrayBuffer[Board]()
 
-    for (i <- 0 to current.board.length) {
-      for (j <- 0 to current.board(i).length) {
-        if (current.board(i)(j).isInstanceOf[Queen]) {
-          val toPassIn : Array[Array[Square]] = copyBoard(current.board)
-          generateChildrenForQueen(toPassIn, current.board(i)(j).asInstanceOf[Queen], children)
+
+    for (i <- 0 to current.getBoard.length) {
+      for (j <- 0 to current.getBoard()(i).length) {
+        if (current.getBoard()(i)(j).isInstanceOf[Queen]) {
+          val toPassIn : Array[Array[Square]] = copyBoard(current.getBoard)
+          generateChildrenForQueen(toPassIn, current.getBoard()(i)(j).asInstanceOf[Queen], children)
         }
+      }
+    }
+
+    children
+  }
+
+   def generateChildrenForQueen(board: Array[Array[Square]], queen: Queen, children: ArrayBuffer[Board]) {
+    if (queen.x != 0) {
+      swap(board, queen.x, queen.y, 0, queen.y)
+      children += new Board(board)
+    }
+    for (i <- 0 to board.length) {
+      swap(board, i, queen.y, i + 1, queen.y)
+      if (i + 1 != queen.x) {
+        children += new Board(board)
       }
     }
 
@@ -68,7 +85,7 @@ object BoardUtils {
       for (square <- squares) {
         print(square)
       }
-      println()
+      println
     }
   }
 
