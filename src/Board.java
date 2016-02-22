@@ -1,3 +1,5 @@
+import scala.Tuple2;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -5,13 +7,18 @@ import java.util.Set;
  * Created by Victor Kwak on 11/9/15.
  */
 public class Board {
+    // Square and Queen objects are written in Scala but can be seamlessly used in Java without special syntax
     final private Square[][] board;
+    final private Queen[] queens;
     private Integer heuristicCost;
 
     public Board(final int n) {
         board = new Square[n][n];
+        queens = new Queen[n];
+        int queenIndex = 0;
         for (int j = 0; j < board[0].length; j++) {
             board[0][j] = new Queen(0, j);
+            queens[queenIndex++] = (Queen) board[0][j];
         }
         for (int i = 1; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -22,7 +29,10 @@ public class Board {
     }
 
     public Board(final Square[][] board) {
-        this.board = BoardUtils.copyBoard(board);
+        //Scala Tuple being used natively in Java
+        Tuple2<Square[][], Queen[]> tuple = BoardUtils.copyBoard(board);
+        this.board = tuple._1();
+        this.queens = tuple._2();
     }
 
     public Square[][] getBoard() {
@@ -38,79 +48,99 @@ public class Board {
 
     private int heuristic() {
         Set<Pair> attackingPairs = new HashSet<>();
-        for (Square[] squares : board) {
-            for (Square square : squares) {
-                if (square instanceof Queen) {
-                    checkLeft((Queen) square, attackingPairs);
-                    checkUpLeft((Queen) square, attackingPairs);
-                    checkUpRight((Queen) square, attackingPairs);
-                    checkRight((Queen) square, attackingPairs);
-                    checkDownLeft((Queen) square, attackingPairs);
-                    checkDownRight((Queen) square, attackingPairs);
-                }
+        for (Queen queen : queens) {
+            if (!queen.left()) {
+                checkLeft(queen, attackingPairs);
+            }
+            if (!queen.upLeft()) {
+                checkUpLeft(queen, attackingPairs);
+            }
+            if (!queen.upRight()) {
+                checkUpRight(queen, attackingPairs);
+            }
+            if (!queen.right()) {
+                checkRight(queen, attackingPairs);
+            }
+            if (!queen.downLeft()) {
+                checkDownLeft(queen, attackingPairs);
+            }
+            if (!queen.downRight()) {
+                checkDownRight(queen, attackingPairs);
             }
         }
         return attackingPairs.size();
     }
 
-    private void checkLeft(final Queen queen, final Set<Pair> attackingPairs) {
-        for (int j = queen.y() - 1; j >= 0; j--) {
-            if (board[queen.x()][j] instanceof Queen) {
-                attackingPairs.add(new Pair(queen, (Queen) board[queen.x()][j]));
+    private void checkLeft(final Queen attackingQueen, final Set<Pair> attackingPairs) {
+        for (int j = attackingQueen.y() - 1; j >= 0; j--) {
+            if (board[attackingQueen.x()][j] instanceof Queen) {
+                Queen attackedQueen = (Queen) board[attackingQueen.x()][j];
+                attackingPairs.add(new Pair(attackingQueen, attackedQueen));
+                attackedQueen.right_$eq(true);
             }
         }
     }
 
-    private void checkRight(final Queen queen, final Set<Pair> attackingPairs) {
-        for (int j = queen.y() + 1; j < board[0].length; j++) {
-            if (board[queen.x()][j] instanceof Queen) {
-                attackingPairs.add(new Pair(queen, (Queen) board[queen.x()][j]));
+    private void checkRight(final Queen attackingQueen, final Set<Pair> attackingPairs) {
+        for (int j = attackingQueen.y() + 1; j < board[0].length; j++) {
+            if (board[attackingQueen.x()][j] instanceof Queen) {
+                Queen attackedQueen = (Queen) board[attackingQueen.x()][j];
+                attackingPairs.add(new Pair(attackingQueen, attackedQueen));
+                attackedQueen.left_$eq(true);
             }
         }
     }
 
-    private void checkUpRight(final Queen queen, final Set<Pair> attackingPairs) {
-        int i = queen.x() - 1;
-        int j = queen.y() + 1;
+    private void checkUpRight(final Queen attackingQueen, final Set<Pair> attackingPairs) {
+        int i = attackingQueen.x() - 1;
+        int j = attackingQueen.y() + 1;
         while (i >= 0 && j < board.length) {
             if (board[i][j] instanceof Queen) {
-                attackingPairs.add(new Pair(queen, (Queen) board[i][j]));
+                Queen attackedQueen = (Queen) board[i][j];
+                attackingPairs.add(new Pair(attackingQueen, attackedQueen));
+                attackedQueen.downLeft_$eq(true);
             }
             --i;
             ++j;
         }
     }
 
-    private void checkUpLeft(final Queen queen, final Set<Pair> attackingPairs) {
-        int i = queen.x() - 1;
-        int j = queen.y() - 1;
+    private void checkUpLeft(final Queen attackingQueen, final Set<Pair> attackingPairs) {
+        int i = attackingQueen.x() - 1;
+        int j = attackingQueen.y() - 1;
         while (i >= 0 && j >= 0) {
             if (board[i][j] instanceof Queen) {
-                attackingPairs.add(new Pair(queen, (Queen) board[i][j]));
+                Queen attackedQueen = (Queen) board[i][j];
+                attackingPairs.add(new Pair(attackingQueen, attackedQueen));
+                attackedQueen.downRight_$eq(true);
             }
             --i;
             --j;
         }
     }
 
-    private void checkDownRight(final Queen queen, final Set<Pair> attackingPairs) {
-        int i = queen.x() + 1;
-        int j = queen.y() + 1;
+    private void checkDownRight(final Queen attackingQueen, final Set<Pair> attackingPairs) {
+        int i = attackingQueen.x() + 1;
+        int j = attackingQueen.y() + 1;
         while (i < board.length && j < board.length) {
             if (board[i][j] instanceof Queen) {
-                attackingPairs.add(new Pair(queen, (Queen) board[i][j]));
+                Queen attackedQueen = (Queen) board[i][j];
+                attackingPairs.add(new Pair(attackingQueen, attackedQueen));
+                attackedQueen.upLeft_$eq(true);
             }
             ++i;
             ++j;
         }
     }
 
-    private void checkDownLeft(final Queen queen, final Set<Pair> attackingPairs) {
-        int i = queen.x() + 1;
-        int j = queen.y() - 1;
+    private void checkDownLeft(final Queen attackingQueen, final Set<Pair> attackingPairs) {
+        int i = attackingQueen.x() + 1;
+        int j = attackingQueen.y() - 1;
         while (i < board.length && j >= 0) {
             if (board[i][j] instanceof Queen) {
-                attackingPairs.add(new Pair(queen, (Queen) board[i][j]));
+                Queen attackedQueen = (Queen) board[i][j];
+                attackingPairs.add(new Pair(attackingQueen, attackedQueen));
+                attackedQueen.upRight_$eq(true);
             }
             ++i;
             --j;

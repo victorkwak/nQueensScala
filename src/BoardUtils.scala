@@ -19,9 +19,11 @@ object BoardUtils {
   def swap(arr: Array[Array[Square]], i: Int, j: Int, k: Int, l: Int) = {
     val temp: Square = arr(i)(j)
     arr(i)(j) = arr(k)(l)
-    arr(i)(j).setXY(i, j)
+    arr(i)(j).x = i
+    arr(i)(j).y = j
     arr(k)(l) = temp
-    arr(k)(l).setXY(k, l)
+    arr(k)(l).x = k
+    arr(k)(l).y = l
   }
 
   def lowestNeighbor(current: Board): Board = {
@@ -52,7 +54,7 @@ object BoardUtils {
       for (square <- squares) {
         (square: @switch) match {
           case queen: Queen =>
-            val toPassIn = copyBoard(current.getBoard)
+            val toPassIn = copyBoard(current.getBoard)._1
             for (board <- generateChildrenForQueen(toPassIn, queen)) {
               children += board
             }
@@ -65,7 +67,7 @@ object BoardUtils {
 
   private def generateChildrenForQueen(board: Array[Array[Square]], queen: Queen): ArrayBuffer[Board] = {
     val children = new ArrayBuffer[Board]()
-    if (queen.x != 0) {
+    if (queen.x!= 0) {
       swap(board, queen.x, queen.y, 0, queen.y)
       children += new Board(board)
     }
@@ -78,19 +80,23 @@ object BoardUtils {
     children
   }
 
-  def copyBoard(board: Array[Array[Square]]): Array[Array[Square]] = {
+  def copyBoard(board: Array[Array[Square]]): (Array[Array[Square]], Array[Queen]) = {
     val newBoard = Array.ofDim[Square](board.length, board(0).length)
+    val newQueenBoard = Array.ofDim[Queen](board.length)
+    var queenIndex = 0
     for (i <- board.indices) {
       for (j <- board(0).indices) {
         (board(i)(j): @switch) match {
           case queen: Queen =>
             newBoard(i)(j) = new Queen(i, j)
+            newQueenBoard(queenIndex) = newBoard(i)(j).asInstanceOf[Queen]
+            queenIndex += 1
           case empty: Empty =>
             newBoard(i)(j) = new Empty(i, j)
         }
       }
     }
-    newBoard
+    (newBoard, newQueenBoard)
   }
 
   /**

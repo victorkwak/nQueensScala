@@ -1,7 +1,7 @@
 /**
   * Created by Victor Kwak on 2/21/16.
   */
-class Pair (private val one: Queen, private val two: Queen){
+class Pair(private val one: Queen, private val two: Queen) {
 
   override def equals(o: Any): Boolean = {
     if (!o.isInstanceOf[Pair]) {
