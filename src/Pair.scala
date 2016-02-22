@@ -1,30 +1,20 @@
 /**
   * Created by Victor Kwak on 2/21/16.
   */
-class Pair {
-  var pair: Array[Queen] = null
-
-  def this(one: Queen, two: Queen) {
-    this()
-    pair = new Array[Queen](2)
-    pair(0) = one
-    pair(1) = two
-  }
-
-  override def hashCode: Int = {
-    (pair(0).x * 17 + pair(0).y) + (pair(1).x * 17 + pair(1).y)
-  }
+class Pair (val one: Queen, val two: Queen){
 
   override def equals(o: Any): Boolean = {
     if (!o.isInstanceOf[Pair]) {
       return false
     }
     val pairToCompare: Pair = o.asInstanceOf[Pair]
-    (pair(0) == pairToCompare.pair(0)) && (pair(1) == pairToCompare.pair(1)) || (pair(0) == pairToCompare.pair(1)) && (pair(1) == pairToCompare.pair(0))
+    one == pairToCompare.one && two == pairToCompare.two ||
+      one == pairToCompare.two && two == pairToCompare.one
   }
 
-  override def toString: String = {
-    "{" + pair(0).x + ", " + pair(0).y + "}" + "{" + pair(1).x + ", " + pair(1).y + "}"
-  }
+  override def hashCode: Int =
+    (one.x * 17 + one.y) + (two.x * 17 + two.y)
 
+  override def toString: String =
+    "{" + one.x + ", " + one.y + "}" + "{" + two.x + ", " + two.y + "}"
 }
