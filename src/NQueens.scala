@@ -1,7 +1,7 @@
 /**
   * Victor Kwak
   */
-object NQueens extends App {
+object NQueens extends App{
   val N = 17
   val HILLCLIMBING_LOOPS = 100
   var totalTime = 0L

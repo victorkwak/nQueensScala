@@ -8,10 +8,10 @@ import scala.util.Random
 object BoardUtils {
 
   def shuffle(toShuffle: Array[Array[Square]]) = {
-    val rand: Random = scala.util.Random
+    val rand = scala.util.Random
 
     for (i <- toShuffle(0).indices) {
-      val rand1: Int = rand.nextInt(toShuffle.length)
+      val rand1 = rand.nextInt(toShuffle.length)
       swap(toShuffle, 0, i, rand1, i)
     }
   }
@@ -62,12 +62,13 @@ object BoardUtils {
         }
       }
     }
+
     children
   }
 
   private def generateChildrenForQueen(board: Array[Array[Square]], queen: Queen): ArrayBuffer[Board] = {
-    val children = new ArrayBuffer[Board]()
-    if (queen.x!= 0) {
+    val children = ArrayBuffer[Board]()
+    if (queen.x != 0) {
       swap(board, queen.x, queen.y, 0, queen.y)
       children += new Board(board)
     }
@@ -100,7 +101,6 @@ object BoardUtils {
   }
 
   /**
-    *
     * @param function code to run
     * @tparam R return type of the function
     * @return Tuple with the result of function and number of nanoseconds the function took to run.

@@ -15,6 +15,5 @@ class Pair(private val one: Queen, private val two: Queen) {
   override def hashCode =
     (one.x * 17 + one.y) + (two.x * 17 + two.y)
 
-  override def toString =
-    "{" + one.x + ", " + one.y + "}" + "{" + two.x + ", " + two.y + "}"
+  override def toString = "{" + one.x + ", " + one.y + "}" + "{" + two.x + ", " + two.y + "}"
 }

@@ -4,7 +4,7 @@
   * that the only possible patterns that can be matched for this class are within
   * this file.
   */
-sealed abstract class Square(xInitialValue: Int, yInitialValue: Int, symbolString: String) {
+class Square(xInitialValue: Int, yInitialValue: Int, symbolString: String) {
   private var _x = xInitialValue
   private var _y = yInitialValue
   private val _symbol = symbolString
@@ -42,11 +42,7 @@ sealed abstract class Square(xInitialValue: Int, yInitialValue: Int, symbolStrin
   override def toString = String.valueOf(symbolString)
 }
 
-class Empty(x: Int, y: Int)
-  extends Square(x, y, " - ")
-
-class Queen(x: Int, y: Int)
-  extends Square(x, y, " Q ") {
+class Queen(x: Int, y: Int) extends Square(x, y, " Q ") {
   var up = false
   var down = false
   var left = false
@@ -56,3 +52,5 @@ class Queen(x: Int, y: Int)
   var downRight = false
   var downLeft = false
 }
+
+class Empty(x: Int, y: Int) extends Square(x, y, " - ")
